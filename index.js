@@ -1,15 +1,14 @@
-// ===============================
+// ==========================
 // Firebase Login System
-// ===============================
+// ==========================
 
 function SignIn() {
 
-    // قراءة البيانات من الحقول
     const email = document.getElementById("username").value.trim();
     const password = document.getElementById("password").value;
 
     if (email === "" || password === "") {
-        alert("من فضلك أدخل البريد الإلكتروني وكلمة المرور");
+        alert("يرجى إدخال البريد الإلكتروني وكلمة المرور");
         return;
     }
 
@@ -19,14 +18,27 @@ function SignIn() {
 
         const user = userCredential.user;
 
-        console.log("Logged In:", user.uid);
+        console.log("User UID:", user.uid);
 
-        // المدير
-        window.location.href = "admin.html";
+        // حساب المدير
+        if (user.uid === "pNLsBe8Y0ONS7oADXgj1z7gEMIg1") {
+
+            alert("مرحباً بك أيها المدير");
+
+            window.location.href = "admin.html";
+
+        } else {
+
+            // أي مستخدم آخر
+            window.location.href = "cashier.html";
+
+        }
 
     })
 
     .catch((error) => {
+
+        console.error(error);
 
         alert(error.message);
 
@@ -34,11 +46,9 @@ function SignIn() {
 
 }
 
-
-
-// ===============================
+// ==========================
 // Logout
-// ===============================
+// ==========================
 
 function SignOut() {
 
@@ -57,3 +67,21 @@ function SignOut() {
     });
 
 }
+
+// ==========================
+// Check Login
+// ==========================
+
+firebase.auth().onAuthStateChanged(function(user){
+
+    if(user){
+
+        console.log("Logged:", user.uid);
+
+    }else{
+
+        console.log("Not Logged");
+
+    }
+
+});
