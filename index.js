@@ -1,33 +1,59 @@
-var database=firebase.database();
-var txtuser="";
-var txtpass="";
-function SignIn(){
-  txtuser=document.getElementById('username').value+"@pos-system-778dd.appspot.com";
-  txtpass=document.getElementById('password').value;
+// ===============================
+// Firebase Login System
+// ===============================
 
-  firebase.auth().signInWithEmailAndPassword(txtuser, txtpass).catch(function(error) {
-    window.alert(error.message)
-    location.href="index.html";
-  });
+function SignIn() {
 
-  firebase.auth().onAuthStateChanged(firebaseUser =>{
-    if(firebaseUser){
-      if(firebaseUser.uid=="UNXtA8yh5KN2HfgqofmUjDVMZCv1"){
-        location.href="admin.html";
-      }
-      else if(firebaseUser.uid=="mWKap68CpVRTGDcDEsOrH9kimjw2"){
-        location.href="cashier.html";
-      }
+    // قراءة البيانات من الحقول
+    const email = document.getElementById("username").value.trim();
+    const password = document.getElementById("password").value;
+
+    if (email === "" || password === "") {
+        alert("من فضلك أدخل البريد الإلكتروني وكلمة المرور");
+        return;
     }
-  });
+
+    firebase.auth().signInWithEmailAndPassword(email, password)
+
+    .then((userCredential) => {
+
+        const user = userCredential.user;
+
+        console.log("Logged In:", user.uid);
+
+        // المدير
+        window.location.href = "admin.html";
+
+    })
+
+    .catch((error) => {
+
+        alert(error.message);
+
+    });
+
 }
 
-function SignOut()
-{
-  firebase.auth().signOut().then(function() {
-    // Sign-out successful.
-    location.href="index.html";
-  }).catch(function(error) {
-    // An error happened.
-  });
+
+
+// ===============================
+// Logout
+// ===============================
+
+function SignOut() {
+
+    firebase.auth().signOut()
+
+    .then(() => {
+
+        window.location.href = "index.html";
+
+    })
+
+    .catch((error) => {
+
+        alert(error.message);
+
+    });
+
 }
